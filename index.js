@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const RESTART = false;
+const RESTART = true;
 
 let unvisitedUrls = [];
 let visitedUrls = [];
@@ -16,7 +16,7 @@ try {
 }
 
 if(RESTART){
-    unvisitedUrls = visitedUrls;
+    unvisitedUrls = [...visitedUrls, ...unvisitedUrls];
     visitedUrls = [];
 }
 
