@@ -1,14 +1,23 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const unvisitedUrls = [];
-const visitedUrls = [];
+const RESTART = false;
+
+let unvisitedUrls = [];
+let visitedUrls = [];
 
 try {
     const unvisitedUrlsString = fs.readFileSync("./unvisitedUrls.json", "utf8");
+    const visitedUrlsString = fs.readFileSync("./visitedUrls.json", "utf8");
     unvisitedUrls = JSON.parse(unvisitedUrlsString)
+    visitedUrls = JSON.parse(visitedUrlsString)
 } catch (error) {
     console.log(error);
+}
+
+if(RESTART){
+    unvisitedUrls = visitedUrls;
+    visitedUrls = [];
 }
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
@@ -18,7 +27,7 @@ const selector = process.argv[3] || "[src*='_Large.']";
 const attributeName = process.argv[4] || "src";
 
 const csvWriter = createCsvWriter({
-    path: `dataMedium.csv`,
+    path: `dataLarge.csv`,
     header: [
         { id: 'page', title: 'PAGE' },
         { id: 'attributeValue', title: 'ATTRIBUTE VALUE' },
